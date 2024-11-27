@@ -1,0 +1,48 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: update repository index / install Updates (CentOS)
+    tags: always
+    dnf:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "CentOS"
+
+  - name: update repository index / install Updates (Ubuntu)
+    tags: always
+    apt:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "Ubuntu"
+
+  hosts: Controller
+  become: true
+  roles:
+    - Controller
+    
+  hosts: Compute
+  become: true
+  roles:
+    - Compute
+    
+  hosts: Database
+  become: true
+  roles:
+    - Database
+    
+  hosts: MessageQueue
+  become: true
+  roles:
+    - MessageQueue
+    
+  hosts: Memcached
+  become: true
+  roles:
+    - Memcached
+    
+  hosts: Etcd
+  become: true
+  roles:
+    - Etcd

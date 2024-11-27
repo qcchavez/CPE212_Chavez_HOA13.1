@@ -1,0 +1,24 @@
+[Controller]
+#Server 1
+192.168.56.116
+
+[Compute]
+#Server 1
+192.168.56.116
+
+[Database]
+#Server 1
+192.168.56.116
+
+[MessageQueue]
+#Server 1
+192.168.56.116
+
+[Memcached]
+#Server 1
+192.168.56.116
+
+[Etcd]
+#Server 1
+192.168.56.116
+

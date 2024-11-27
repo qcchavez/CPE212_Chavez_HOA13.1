@@ -1,0 +1,20 @@
+---
+
+- name: Install required package
+  apt:
+    name: kibana
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: Configure Kibana
+  template:
+    src: kibana.yml.j2
+    dest: /etc/kibana/kibana.yml
+  when: ansible_distribution == "Ubuntu"
+
+- name: Enable Kibana service
+  service:
+    name: kibana
+    state: restarted
+    enabled: true
+  when: ansible_distribution == "Ubuntu"
