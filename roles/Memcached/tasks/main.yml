@@ -1,20 +1,18 @@
 ---
-
-- name: Install required package
+- name: Install Memcached
   apt:
-    name: kibana
-    state: latest
-  when: ansible_distribution == "Ubuntu"
+    name: memcached
+    state: present
 
-- name: Configure Kibana
-  template:
-    src: kibana.yml.j2
-    dest: /etc/kibana/kibana.yml
-  when: ansible_distribution == "Ubuntu"
+- name: Configure Memcached to listen on all interfaces
+  lineinfile:
+    path: /etc/memcached.conf
+    regexp: '-l'
+    line: '-l 0.0.0.0'
 
-- name: Enable Kibana service
-  service:
-    name: kibana
+- name: Enable Memcached service
+  systemd:
+    name: memcached
     state: restarted
-    enabled: true
-  when: ansible_distribution == "Ubuntu"
+    enabled: yes
+

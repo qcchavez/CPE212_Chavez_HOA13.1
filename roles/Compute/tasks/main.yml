@@ -1,20 +1,12 @@
 ---
-
-- name: Install required package
+- name: Install Compute service
   apt:
-    name: kibana
-    state: latest
-  when: ansible_distribution == "Ubuntu"
+    name: nova-compute
+    state: present
 
-- name: Configure Kibana
-  template:
-    src: kibana.yml.j2
-    dest: /etc/kibana/kibana.yml
-  when: ansible_distribution == "Ubuntu"
+- name: Ensure Compute service is running
+  systemd:
+    name: nova-compute
+    state: started
+    enabled: yes
 
-- name: Enable Kibana service
-  service:
-    name: kibana
-    state: restarted
-    enabled: true
-  when: ansible_distribution == "Ubuntu"

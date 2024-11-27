@@ -1,20 +1,24 @@
 ---
-
-- name: Install required package
+- name: Install Etcd
   apt:
-    name: kibana
-    state: latest
-  when: ansible_distribution == "Ubuntu"
+    name: etcd
+    state: present
 
-- name: Configure Kibana
-  template:
-    src: kibana.yml.j2
-    dest: /etc/kibana/kibana.yml
-  when: ansible_distribution == "Ubuntu"
+- name: Configure Etcd for OpenStack
+  copy:
+    dest: /etc/default/etcd
+    content: |
+      ETCD_LISTEN_PEER_URLS="http://0.0.0.0:2380"
+      ETCD_LISTEN_CLIENT_URLS="http://0.0.0.0:2379"
+      ETCD_INITIAL_ADVERTISE_PEER_URLS="http://127.0.0.1:2380"
+      ETCD_ADVERTISE_CLIENT_URLS="http://127.0.0.1:2379"
+      ETCD_INITIAL_CLUSTER="default=http://127.0.0.1:2380"
+      ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster-01"
+      ETCD_INITIAL_CLUSTER_STATE="new"
 
-- name: Enable Kibana service
-  service:
-    name: kibana
+- name: Enable Etcd service
+  systemd:
+    name: etcd
     state: restarted
-    enabled: true
-  when: ansible_distribution == "Ubuntu"
+    enabled: yes
+

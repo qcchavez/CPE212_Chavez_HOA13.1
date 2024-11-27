@@ -1,48 +1,47 @@
 ---
-- hosts: all
+- name: Update repository indexes
+  hosts: all
   become: true
-  pre_tasks:
+  tasks:
+  
+    - name: Update repository index (Ubuntu)
+      apt:
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
 
-  - name: update repository index / install Updates (CentOS)
-    tags: always
-    dnf:
-      update_cache: yes
-    changed_when: false
-    when: ansible_distribution == "CentOS"
-
-  - name: update repository index / install Updates (Ubuntu)
-    tags: always
-    apt:
-      update_cache: yes
-    changed_when: false
-    when: ansible_distribution == "Ubuntu"
-
+- name: Install and configure Controller role
   hosts: Controller
   become: true
   roles:
     - Controller
-    
+
+- name: Install and configure Compute role
   hosts: Compute
   become: true
   roles:
     - Compute
-    
+
+- name: Install and configure Database role
   hosts: Database
   become: true
   roles:
     - Database
-    
+
+- name: Install and configure Message Queue role
   hosts: MessageQueue
   become: true
   roles:
     - MessageQueue
-    
+
+- name: Install and configure Memcached role
   hosts: Memcached
   become: true
   roles:
     - Memcached
-    
+
+- name: Install and configure Etcd role
   hosts: Etcd
   become: true
   roles:
     - Etcd
+    
